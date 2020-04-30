@@ -1,0 +1,29 @@
+
+rm(list = ls(all=TRUE))
+
+args <- commandArgs(T)
+set.seed(as.numeric(args[1]))
+job_id <- (as.numeric(args[1]))
+
+library(simulateGP)
+library(TwoSampleMR)
+source('MRest.R')
+
+
+reps = 50
+n=250000 #number of individuals
+l=150    #number of SNPs (total)
+
+source('scenarioA.R')
+
+l1 <- 50 #number of additional SNPs for X1
+source('scenarioB.R')
+
+source('scenarioC.R')
+
+
+message("filesave", sprintf("sim_output_A%s.csv", job_id))
+
+write.csv(resultsA, file=sprintf("sim_output_A%s.csv", job_id))
+write.csv(resultsB, file=sprintf("sim_output_B%s.csv", job_id))
+write.csv(resultsC, file=sprintf("sim_output_C%s.csv", job_id))

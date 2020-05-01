@@ -1,16 +1,20 @@
 
 rm(list = ls(all=TRUE))
 
-args <- commandArgs(T)
-set.seed(as.numeric(args[1]))
-job_id <- (as.numeric(args[1]))
+#args <- commandArgs(T)
+#set.seed(as.numeric(args[1]))
+#job_id <- (as.numeric(args[1]))
+job_id <- 2
 
+
+install.packages("devtools")
+devtools::install_github("MRCIEU/TwoSampleMR")
 library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')
 
 
-reps = 50
+reps = 1
 n=250000 #number of individuals
 l=150    #number of SNPs (total)
 
@@ -22,8 +26,8 @@ source('scenarioB.R')
 source('scenarioC.R')
 
 
-message("filesave", sprintf("sim_output_A%s.csv", job_id))
+message("filesave", sprintf("sim_output_A%s.Rda", job_id))
 
-write.csv(resultsA, file=sprintf("sim_output_A%s.csv", job_id))
-write.csv(resultsB, file=sprintf("sim_output_B%s.csv", job_id))
-write.csv(resultsC, file=sprintf("sim_output_C%s.csv", job_id))
+save(resultsA, file=sprintf("sim_output_A%s.Rda", job_id))
+save(resultsB, file=sprintf("sim_output_B%s.Rda", job_id))
+save(resultsC, file=sprintf("sim_output_C%s.Rda", job_id))

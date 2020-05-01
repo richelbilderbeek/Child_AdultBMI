@@ -1,14 +1,13 @@
 
 rm(list = ls(all=TRUE))
 
-#args <- commandArgs(T)
-#set.seed(as.numeric(args[1]))
-#job_id <- (as.numeric(args[1]))
-job_id <- 2
+args <- commandArgs(T)
+set.seed(as.numeric(args[1]))
+job_id <- (as.numeric(args[1]))
 
 
-install.packages("devtools")
-devtools::install_github("MRCIEU/TwoSampleMR")
+
+#devtools::install_github("MRCIEU/TwoSampleMR")
 library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')

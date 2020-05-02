@@ -5,15 +5,12 @@ args <- commandArgs(T)
 set.seed(as.numeric(args[1]))
 job_id <- (as.numeric(args[1]))
 
-
-
-#devtools::install_github("MRCIEU/TwoSampleMR")
 library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')
 
 
-reps = 1
+reps = 50
 n=250000 #number of individuals
 l=150    #number of SNPs (total)
 

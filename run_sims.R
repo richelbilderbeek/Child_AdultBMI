@@ -1,9 +1,9 @@
 
 rm(list = ls(all=TRUE))
 
-args <- commandArgs(T)
-set.seed(as.numeric(args[1]))
-job_id <- (as.numeric(args[1]))
+#args <- commandArgs(T)
+#set.seed(as.numeric(args[1]))
+#job_id <- (as.numeric(args[1]))
 
 library(simulateGP)
 library(TwoSampleMR)

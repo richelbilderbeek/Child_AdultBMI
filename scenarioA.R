@@ -76,6 +76,40 @@ res <- MRest()
 res3 <- data.frame("A.iii", res)
 colnames(res3)[1] <- ("sim")
 
-resultsA <- rbind(resultsA,res1, res2, res3)
+##iv - As iii but all binary (underlying cont latent variable)
+
+
+#variables
+g <- make_geno(n,l,0.5)
+u = rnorm(n,0,1)
+
+
+#effects
+effs_g <- (choose_effects(l, 0.05))
+effs_g2 <- (choose_effects(l, 0.05))
+effs_c1 <- (choose_effects(1, 0.25))
+#effs_12 <- choose_effects(1, 0.5)
+
+#exposures
+x1_c <- make_phen(c(effs_g, effs_c1), cbind(g, u))
+x2_c <- make_phen(c(effs_g2, effs_c1, 0.5), cbind(g, u, x1))
+#outcome
+y_c <- make_phen(c(0.1, 0.3, effs_c1), cbind(x1, x2, u))
+
+x1 <- as.numeric(x1_c>quantile(x1_c, c(0.75)))
+x2 <- as.numeric(x2_c>quantile(x2_c, c(0.75)))
+y <- as.numeric(y_c>quantile(y_c, c(0.75)))
+
+#estimation using LPM
+res <- MRest()
+res4 <- data.frame("A.iv_a", res)
+colnames(res4)[1] <- ("sim")
+
+#estimation using LPM
+res <- MRest_OR()
+res5 <- data.frame("A.iv_b", res)
+colnames(res5)[1] <- ("sim")
+
+resultsA <- rbind(resultsA,res1, res2, res3, res4, res5)
 
 }

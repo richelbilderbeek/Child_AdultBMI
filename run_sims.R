@@ -10,7 +10,7 @@ library(TwoSampleMR)
 source('MRest.R')
 
 
-reps = 100
+reps = 2
 n=250000 #number of individuals
 l=150    #number of SNPs (total)
 

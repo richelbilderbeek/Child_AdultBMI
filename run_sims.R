@@ -10,13 +10,14 @@ library(TwoSampleMR)
 source('MRest.R')
 
 
-reps = 2
+reps = 100
 n=250000 #number of individuals
-l=150    #number of SNPs (total)
+l=300    #number of SNPs (for exposures - total)
+lo = 100 #number of SNPs for outcome
 
 source('scenarioA.R')
 
-l1 <- 50 #number of additional SNPs for X1
+l1 <- 100 #number of additional SNPs for X1
 source('scenarioB.R')
 
 source('scenarioC.R')

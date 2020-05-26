@@ -1,10 +1,28 @@
 
 MRest <- function()
 {
-
- mvdat <- make_mvdat(list(x1, x2), y, g)
- mvdat$minp <- apply(mvdat$exposure_pval, 1, min)
- mvdat <- as.data.frame(mvdat)
+  mvdat <- data.frame()
+  for(s in 1:(l+lo)){
+    x1_res <- summary(lm(x1~g[,s]))
+    x2_res <- summary(lm(x2~g[,s]))
+    y_res <- summary(lm(y~gb[,s]))
+    mvdat[s,1] <- (x1_res$coefficient[2,1])
+    mvdat[s,2] <- (x2_res$coefficient[2,1])
+    mvdat[s,3] <- (y_res$coefficient[2,1])
+    
+    mvdat[s,4] <- (x1_res$coefficient[2,2])
+    mvdat[s,5] <- (x2_res$coefficient[2,2])
+    mvdat[s,6] <- (y_res$coefficient[2,2])
+    
+    mvdat[s,7] <- (x1_res$coefficient[2,4])
+    mvdat[s,8] <- (x2_res$coefficient[2,4])
+    mvdat[s,9] <- (y_res$coefficient[2,4])
+    
+  }
+  
+  colnames(mvdat) <- c("exposure_beta.x1", "exposure_beta.x2", "outcome_beta","exposure_se.x1", "exposure_se.x2", 
+                       "outcome_se","exposure_pval.x1", "exposure_pval.x2", "outcome_pval" )
+ 
  dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
  unix1 <- summary(lm(dat1$outcome_beta ~ -1 + dat1$exposure_beta.x1, weights = 1/(dat1$outcome_se^2)))
  
@@ -13,7 +31,8 @@ MRest <- function()
  dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
  unix2 <- summary(lm(dat2$outcome_beta ~ -1 + dat2$exposure_beta.x2, weights = 1/(dat2$outcome_se^2)))
  F_2 <- (dat2$exposure_beta.x2/dat2$exposure_se.x2)^2
-
+ 
+ mvdat$minp <- apply(mvdat[,c("exposure_pval.x1","exposure_pval.x2")], 1, min)
   mv <- subset(mvdat, mvdat$minp < 5e-08)
   mvmr <- summary(lm(mv$outcome_beta ~ -1 + mv$exposure_beta.x1 + mv$exposure_beta.x2, weights = 1/(mv$outcome_se^2)))
   
@@ -49,7 +68,7 @@ MRest_OR <- function()
   for(s in 1:(l+lo)){
     x1_res <- summary(glm(x1~g[,s], family = binomial))
     x2_res <- summary(glm(x2~g[,s], family = binomial))
-    y_res <- summary(glm(y~g[,s], family = binomial))
+    y_res <- summary(glm(y~gb[,s], family = binomial))
     mvdat[s,1] <- exp(x1_res$coefficient[2,1])
     mvdat[s,2] <- exp(x2_res$coefficient[2,1])
     mvdat[s,3] <- exp(y_res$coefficient[2,1])
@@ -109,45 +128,112 @@ MRest_OR <- function()
 
 MRest_3 <- function()
 {
+  dat <- data.frame()
+  for(s in 1:(l1)){
+    x1_res <- summary(lm(x1~g1_1[,s]))
+    y_res <- summary(lm(y~g1b[,s]))
+   
+    dat[s,1] <- (x1_res$coefficient[2,1])
+    dat[s,2] <- (y_res$coefficient[2,1])
+    dat[s,3] <- (x1_res$coefficient[2,2])
+    dat[s,4] <- (y_res$coefficient[2,2])
+    dat[s,5] <- (x1_res$coefficient[2,4])
+    dat[s,6] <- (y_res$coefficient[2,4])
+    
+  }
   
-  #x1 only SNPs
-  dat <- get_effs(x1, y, g1)
+  colnames(dat) <- c("beta.exposure", "beta.outcome","se.exposure", 
+                       "se.outcome","pval.exposure", "pval.outcome" )
+  
   dat <- subset(dat, dat$pval.exposure < 5e-08)
   n_g1 <- nrow(dat)
   unix1_y <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
   
-  dat <- get_effs(x1, x2, g1)
+
+  
+  for(s in 1:(l1)){
+    x1_res <- summary(lm(x1~g1_1[,s]))
+    x2_res <- summary(lm(x2~g1[,s]))
+    
+    dat[s,1] <- (x1_res$coefficient[2,1])
+    dat[s,2] <- (x2_res$coefficient[2,1])
+    dat[s,3] <- (x1_res$coefficient[2,2])
+    dat[s,4] <- (x2_res$coefficient[2,2])
+    dat[s,5] <- (x1_res$coefficient[2,4])
+    dat[s,6] <- (x2_res$coefficient[2,4])
+    
+  }
+  
+  colnames(dat) <- c("beta.exposure", "beta.outcome","se.exposure", 
+                     "se.outcome","pval.exposure", "pval.outcome" )
+  
   dat <- subset(dat, dat$pval.exposure < 5e-08)
   unix1_x2 <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
   
-  dat <- get_effs(x1, x3, g1)
+  
+  for(s in 1:(l1)){
+    x1_res <- summary(lm(x1~g1_1[,s]))
+    x3_res <- summary(lm(x3~g1[,s]))
+    
+    dat[s,1] <- (x1_res$coefficient[2,1])
+    dat[s,2] <- (x3_res$coefficient[2,1])
+    dat[s,3] <- (x1_res$coefficient[2,2])
+    dat[s,4] <- (x3_res$coefficient[2,2])
+    dat[s,5] <- (x1_res$coefficient[2,4])
+    dat[s,6] <- (x3_res$coefficient[2,4])
+    
+  }
+  
+  colnames(dat) <- c("beta.exposure", "beta.outcome","se.exposure", 
+                     "se.outcome","pval.exposure", "pval.outcome" )
   dat <- subset(dat, dat$pval.exposure < 5e-08)
   unix1_x3 <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
   
   F_1 <- (dat$beta.exposure/dat$se.exposure)^2
   
   
-  #SNPs for all exposures
-  dat <- get_effs(x1, y, g)
-  dat <- subset(dat, dat$pval.exposure < 5e-08)
+  #SNPs for all exposures - make one dataset with all the data needed for this part and then estimate the different parts. 
+  mvdat <- data.frame()
+  
+  for(s in 1:(l)){
+    x1_res <- summary(lm(x1~g_1[,s]))
+    x2_res <- summary(lm(x2~g[,s]))
+    x3_res <- summary(lm(x3~g[,s]))
+    y_res <- summary(lm(y~gb[,s]))
+    mvdat[s,1] <- (x1_res$coefficient[2,1])
+    mvdat[s,2] <- (x2_res$coefficient[2,1])
+    mvdat[s,3] <- (x3_res$coefficient[2,1])
+    mvdat[s,4] <- (y_res$coefficient[2,1])
+    
+    mvdat[s,5] <- (x1_res$coefficient[2,2])
+    mvdat[s,6] <- (x2_res$coefficient[2,2])
+    mvdat[s,7] <- (x3_res$coefficient[2,2])
+    mvdat[s,8] <- (y_res$coefficient[2,2])
+    
+    mvdat[s,9] <- (x1_res$coefficient[2,4])
+    mvdat[s,10] <- (x2_res$coefficient[2,4])
+    mvdat[s,11] <- (x3_res$coefficient[2,4])
+    mvdat[s,12] <- (y_res$coefficient[2,4])
+    
+  }
+  
+  colnames(mvdat) <- c("exposure_beta.x1", "exposure_beta.x2", "exposure_beta.x3", "outcome_beta","exposure_se.x1", "exposure_se.x2", 
+                       "exposure_se.x3", "outcome_se","exposure_pval.x1", "exposure_pval.x2", "exposure_pval.x3", "outcome_pval" )
+  
+  dat <- mvdat
+    dat <- subset(dat, dat$exposure_pval.x1 < 5e-08)
   n_g <- nrow(dat)
-  unix1_yp <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
+ 
+   unix1_yp <- summary(lm(dat$outcome_beta ~ -1 + dat$exposure_beta.x1, weights = 1/(dat$outcome_se^2)))
+  unix1_x2p <- summary(lm(dat$exposure_beta.x2 ~ -1 + dat$exposure_beta.x1, weights = 1/(dat$exposure_se.x2^2)))
+  unix1_x3p <- summary(lm(dat$exposure_beta.x3 ~ -1 + dat$exposure_beta.x1, weights = 1/(dat$exposure_se.x3^2)))
   
-  dat <- get_effs(x1, x2, g)
-  dat <- subset(dat, dat$pval.exposure < 5e-08)
-  unix1_x2p <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
-  
-  dat <- get_effs(x1, x3, g)
-  dat <- subset(dat, dat$pval.exposure < 5e-08)
-  unix1_x3p <- summary(lm(dat$beta.outcome ~ -1 + dat$beta.exposure, weights = 1/(dat$se.outcome^2)))
-  
-  F_1p <- (dat$beta.exposure/dat$se.exposure)^2
+  F_1p <- (dat$exposure_beta.x1/dat$exposure_se.x1)^2
   
   #g_all <- cbind(g1, g)
   
-  mvdat <- make_mvdat(list(x1, x2, x3), y, g)
-  mvdat$minp <- apply(mvdat$exposure_pval, 1, min)
-  mvdat <- as.data.frame(mvdat)
+ # mvdat <- make_mvdat(list(x1, x2, x3), y, g)
+  mvdat$minp <- apply(mvdat[,c("exposure_pval.x1","exposure_pval.x2","exposure_pval.x3")], 1, min)
   mv <- subset(mvdat, mvdat$minp < 5e-08)
   mvmr <- summary(lm(mv$outcome_beta ~ -1 + mv$exposure_beta.x1 + mv$exposure_beta.x2 + mv$exposure_beta.x3, weights = 1/(mv$outcome_se^2)))
   

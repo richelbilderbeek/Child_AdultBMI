@@ -26,14 +26,14 @@ for(i in 1:reps){
   
   #outcome 
   ya <- make_phen(c(0.3, effs_out, effs_c1), cbind(x1, g[,(l+1):(l+lo)], u))
-  x2 <- make_phen(c(effs_g2, effs_c1, 0.5, 0.2), cbind(g[,1:l], u, x1, ya))
+  x2 <- make_phen(c(effs_g2, effs_c1, 0.5, 0.5), cbind(g[,1:l], u, x1, ya))
   
   #exposures
   x1b <- make_phen(c(effs_g, effs_c1), cbind(gb[,1:l], ub))
   
   #outcome 
   y <- make_phen(c(0.3, effs_out, effs_c1), cbind(x1b, gb[,(l+1):(l+lo)], ub))
-  x2b <- make_phen(c(effs_g2, effs_c1, 0.5, 0.2), cbind(gb[,1:l], ub, x1b, y))
+  x2b <- make_phen(c(effs_g2, effs_c1, 0.5, 0.5), cbind(gb[,1:l], ub, x1b, y))
   
   res <- MRest()
   res1 <- data.frame("C.i", res)
@@ -80,14 +80,14 @@ for(i in 1:reps){
   
   x1 <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], u))
   y_conta <- make_phen(c(0.3, effs_out, effs_c1), cbind(x1, g[,(l+1):(l+lo)], u))
-  x2 <- make_phen(c(effs_g2, effs_c1, 0.5, 0.2), cbind(g[,1:l], u, x1, y_conta))
+  x2 <- make_phen(c(effs_g2, effs_c1, 0.5, 0.5), cbind(g[,1:l], u, x1, y_conta))
   
  
   #outcome 
   x1b <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], u))
   y_contb <- make_phen(c(0.3, effs_out, effs_c1), cbind(x1b, gb[,(l+1):(l+lo)], ub))
   y <- as.numeric(y_contb>quantile(y_contb, c(0.75)))
-  x2b <- make_phen(c(effs_g2, effs_c1, 0.5, 0.2), cbind(gb[,1:l], ub, x1b, y_contb))
+  x2b <- make_phen(c(effs_g2, effs_c1, 0.5, 0.5), cbind(gb[,1:l], ub, x1b, y_contb))
   
   res <- MRest()
   res4 <- data.frame("C.iv", res)

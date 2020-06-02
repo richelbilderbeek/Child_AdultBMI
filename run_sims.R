@@ -9,8 +9,11 @@ library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')
 
+<<<<<<< HEAD
 #clock<-proc.time(); clock;
 
+=======
+>>>>>>> 58e6976b7c49b0a333b17ed00ee4014c7978c1d9
 reps = 5
 n = 200000 #number of individuals
 l = 150    #number of SNPs (for exposures - total)

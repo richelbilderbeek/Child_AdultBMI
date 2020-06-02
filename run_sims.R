@@ -9,11 +9,6 @@ library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')
 
-<<<<<<< HEAD
-#clock<-proc.time(); clock;
-
-=======
->>>>>>> 58e6976b7c49b0a333b17ed00ee4014c7978c1d9
 reps = 5
 n = 200000 #number of individuals
 l = 150    #number of SNPs (for exposures - total)
@@ -25,11 +20,6 @@ l1 <- 100 #number of additional SNPs for X1
 source('scenarioB.R')
 
 source('scenarioC.R')
-
-
-#clock_dur<-proc.time()-clock; clock_dur;
-#(time <- paste0("Computation time = ", round(clock_dur[3]/60, 2)," minutes"))
-
 
 message("filesave", sprintf("sim_output_A%s.Rda", job_id))
 

@@ -3,8 +3,8 @@ resultsA = NULL
 
 for(i in 1:reps){
 #effects
-effs_g <- (choose_effects(l, 0.05))
-effs_g2 <- 0.25*effs_g + 0.75*(choose_effects(l, 0.05))
+effs_g <- abs(choose_effects(l, 0.05))
+effs_g2 <- 0.25*effs_g + 0.75*abs(choose_effects(l, 0.05))
 effs_out <- (choose_effects(lo, 0.05))
 effs_c1 <- (choose_effects(1, 0.25))
 effs_c2 <- (choose_effects(1, 0.25))
@@ -29,7 +29,7 @@ x1b <- make_phen(c(effs_g, effs_c1), cbind(gb[,1:l], ub))
 x2b <- make_phen(c(effs_g, effs_c2, 0.5), cbind(gb[,1:l], u2b, x1b))
 
 #outcome
-y <- make_phen(c(0.1, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
+y <- make_phen(c(0.2, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
 
 res <- MRest()
 res1 <- data.frame("A.i", res)
@@ -46,32 +46,32 @@ x2b <- make_phen(c(effs_c2, 0.5), cbind(u2b, x1b))
 
 
 #outcome
-y <- make_phen(c(0.1, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
+y <- make_phen(c(0.2, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
 
 res <- MRest()
 res2 <- data.frame("A.ii", res)
 colnames(res2)[1] <- ("sim")
 
-##iii - SNPs have different effects on X1 and X2; Confounder has the same effect
+##iii - SNPs have different effects on X1 and X2;
 
 #exposures
 x1 <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], ua))
-x2 <- make_phen(c(effs_g2, effs_c1, 0.5), cbind(g[,1:l], ua, x1))
+x2 <- make_phen(c(effs_g2, effs_c2, 0.5), cbind(g[,1:l], u2a, x1))
 
 x1b <- make_phen(c(effs_g, effs_c1), cbind(gb[,1:l], ub))
-x2b <- make_phen(c(effs_g2, effs_c1, 0.5), cbind(gb[,1:l], ub, x1))
+x2b <- make_phen(c(effs_g2, effs_c2, 0.5), cbind(gb[,1:l], u2b, x1b))
 
 #outcome
-y <- make_phen(c(0.1, 0.3, effs_out, effs_c1), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub))
+y <- make_phen(c(0.2, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
 
 
 res <- MRest()
 res3 <- data.frame("A.iii", res)
 colnames(res3)[1] <- ("sim")
 
+
+
 ##iv - As iii but all binary (underlying cont latent variable)
-
-
 
 #exposures
 x1_c <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], ua))

@@ -9,11 +9,11 @@ resultsB = NULL
 for(i in 1:reps){
   
   #effects
-  effs_g1 <- choose_effects(l1, 0.025)
-  effs_ga <- (choose_effects(l, 0.025))
-  effs_gb <- (choose_effects(l, 0.05))
-  effs_gc <- (choose_effects(l, 0.05))
-  effs_c1 <- (choose_effects(1, 0.25))
+  effs_g1 <- abs(choose_effects(l1, 0.05))
+  effs_ga <- abs((choose_effects(l, 0.05)))
+  effs_gb <- 0.25*effs_ga + 0.75*abs(choose_effects(l, 0.05))
+  effs_gc <- 0.25*effs_ga + 0.75*abs(choose_effects(l, 0.05))
+  effs_c1 <- abs(choose_effects(1, 0.25))
   
   
    ##i - have snps for x1
@@ -32,7 +32,7 @@ for(i in 1:reps){
   #exposures
   x1a <- make_phen(c(effs_g1, effs_ga, effs_c1), cbind(g1, g, u))
   x2 <- make_phen(c(effs_gb, effs_c1, d), cbind(g, u, x1a))
-  x3 <- make_phen(c(effs_gc, effs_c1, d), cbind(g, u, x2))
+  x3 <- make_phen(c(effs_gc, effs_c1, e), cbind(g, u, x2))
   
   #outcome
   
@@ -46,7 +46,7 @@ for(i in 1:reps){
   #exposures
   x1b <- make_phen(c(effs_g1, effs_ga, effs_c1), cbind(g1b, gb, ub))
   x2b <- make_phen(c(effs_gb, effs_c1, d), cbind(gb, ub, x1b))
-  x3b <- make_phen(c(effs_gc, effs_c1, d), cbind(gb, ub, x2b))
+  x3b <- make_phen(c(effs_gc, effs_c1, e), cbind(gb, ub, x2b))
   
   y <- make_phen(c(a, b, c, effs_c1), cbind(x1b, x2b, x3b, ub))
  

@@ -51,7 +51,7 @@ for(i in 1:reps){
   #outcome
   x1b <- make_phen(c(effs_g, effs_c1), cbind(gb[,1:l], ub))
   x2b <- make_phen(c(effs_g2, effs_c2, 0.5), cbind(gb[,1:l], u2b, x1b))
-  y <- make_phen(c(0, 0.3, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
+  y <- make_phen(c(0, -0.25, effs_out, effs_c1, effs_c2), cbind(x1b, x2b, gb[,(l+1):(l+lo)], ub, u2b))
   
   
   res <- MRest()
@@ -102,14 +102,14 @@ for(i in 1:reps){
   
   x1 <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], u))
   y_conta <- make_phen(c(0.3, effs_out, effs_c1, effs_c2), cbind(x1, g[,(l+1):(l+lo)], u, u2))
-  x2 <- make_phen(c(effs_g2, effs_c2, 0.5, 0.5), cbind(g[,1:l], u2, x1, y_conta))
+  x2 <- make_phen(c(effs_g2, effs_c2, 0.5, -0.25), cbind(g[,1:l], u2, x1, y_conta))
   
  
   #outcome 
   x1b <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], u))
   y_contb <- make_phen(c(0.3, effs_out, effs_c1, effs_c2), cbind(x1b, gb[,(l+1):(l+lo)], ub, u2b))
   y <- as.numeric(y_contb>quantile(y_contb, c(0.75)))
-  x2b <- make_phen(c(effs_g2, effs_c2, 0.5, 0.5), cbind(gb[,1:l], u2b, x1b, y_contb))
+  x2b <- make_phen(c(effs_g2, effs_c2, 0.5, -0.25), cbind(gb[,1:l], u2b, x1b, y_contb))
   
   res <- MRest()
   res4 <- data.frame("C.iv", res)

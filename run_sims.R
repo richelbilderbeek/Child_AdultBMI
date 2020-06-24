@@ -9,12 +9,12 @@ library(simulateGP)
 library(TwoSampleMR)
 source('MRest.R')
 
-reps = 5
-n = 200000 #number of individuals
+reps = 25
+n = 300000 #number of individuals
 l = 150    #number of SNPs (for exposures - total)
 lo = 50 #number of SNPs for outcome
 
-#source('scenarioA.R')
+source('scenarioA.R')
 
 l1 <- 100 #number of additional SNPs for X1
 source('scenarioB.R')

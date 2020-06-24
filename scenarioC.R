@@ -9,6 +9,7 @@ for(i in 1:reps){
   effs_g <- (choose_effects(l, 0.05))
   effs_g2 <- 0.25*effs_g + 0.75*(choose_effects(l, 0.05))
   effs_out <- (choose_effects(lo, 0.05))
+  
   effs_c1 <- (choose_effects(1, 0.15))
   effs_c2 <- (choose_effects(1, 0.15))
   
@@ -38,9 +39,40 @@ for(i in 1:reps){
   y <- make_phen(c(0.3, effs_out, effs_c1, effs_c2), cbind(x1b, gb[,(l+1):(l+lo)], ub, u2b))
   x2b <- make_phen(c(effs_g2, effs_c2, 0.5, 0.25), cbind(gb[,1:l], u2b, x1b, y))
   
-  res <- MRest()
+  res <- MRest(TRUE)      # nb this includes all of the snps for y as snps for x2 (but not for x1)
   res1 <- data.frame("C.i", res)
   colnames(res1)[1] <- ("sim")
+  
+  #i.b. same as i but the same number of snps affect x1/x2 and y - i.e. 100 for each
+  #reset l and lo for this sim and save original values for next time
+  la = l
+  loa = lo
+  l = 100
+  lo = 100
+  
+  effs_gb <- (choose_effects(l, 0.05))
+  effs_g2b <- 0.25*effs_gb + 0.75*(choose_effects(l, 0.05))
+  effs_outb <- (choose_effects(lo, 0.05))
+  
+  x1 <- make_phen(c(effs_gb, effs_c1), cbind(g[,1:l], u))
+  
+  #outcome 
+  ya <- make_phen(c(0.3, effs_outb, effs_c1, effs_c2), cbind(x1, g[,(l+1):(l+lo)], u, u2))
+  x2 <- make_phen(c(effs_g2b, effs_c2, 0.5, 0.25), cbind(g[,1:l], u2, x1, ya))
+  
+  #exposures
+  x1b <- make_phen(c(effs_gb, effs_c1), cbind(gb[,1:l], ub))
+  
+  #outcome 
+  y <- make_phen(c(0.3, effs_outb, effs_c1, effs_c2), cbind(x1b, gb[,(l+1):(l+lo)], ub, u2b))
+  x2b <- make_phen(c(effs_g2b, effs_c2, 0.5, 0.25), cbind(gb[,1:l], u2b, x1b, y))
+  
+  res <- MRest(TRUE)      # nb this includes all of the snps for y as snps for x2 (but not for x1)
+  res1b <- data.frame("C.ib", res)
+  colnames(res1b)[1] <- ("sim")
+  # reset l and lo to standard values
+  l = la
+  lo=loa
   
   #ii. same model but x2 -> y and x1 !-> y
   
@@ -115,6 +147,6 @@ for(i in 1:reps){
   res4 <- data.frame("C.iv", res)
   colnames(res4)[1] <- ("sim")
   
-  resultsC <- rbind(resultsC,res1,res2,res3,res3b,res4)
+  resultsC <- rbind(resultsC,res1,res1b,res2,res3,res3b,res4)
   
 }

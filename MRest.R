@@ -1,8 +1,11 @@
 
-MRest <- function()
+MRest <- function(loinc = FALSE)
 {
+  if (loinc == TRUE) {ltot = l+lo}
+  else if (loinc == FALSE) {ltot = l}
+  
   mvdat <- data.frame()
-  for(s in 1:(l+lo)){
+  for(s in 1:(ltot)){
     x1_res <- summary(lm(x1~g[,s]))
     x2_res <- summary(lm(x2~g[,s]))
     y_res <- summary(lm(y~gb[,s]))
@@ -23,17 +26,20 @@ MRest <- function()
   colnames(mvdat) <- c("exposure_beta.x1", "exposure_beta.x2", "outcome_beta","exposure_se.x1", "exposure_se.x2", 
                        "outcome_se","exposure_pval.x1", "exposure_pval.x2", "outcome_pval" )
  
- dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
+ #dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
+  dat1 <- mvdat[1:l,]
  unix1 <- summary(lm(dat1$outcome_beta ~ -1 + dat1$exposure_beta.x1, weights = 1/(dat1$outcome_se^2)))
  
  F_1 <- (dat1$exposure_beta.x1/dat1$exposure_se.x1)^2
  
- dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
+ #dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
+ dat2 <- mvdat
  unix2 <- summary(lm(dat2$outcome_beta ~ -1 + dat2$exposure_beta.x2, weights = 1/(dat2$outcome_se^2)))
  F_2 <- (dat2$exposure_beta.x2/dat2$exposure_se.x2)^2
  
- mvdat$minp <- apply(mvdat[,c("exposure_pval.x1","exposure_pval.x2")], 1, min)
-  mv <- subset(mvdat, mvdat$minp < 5e-08)
+ #mvdat$minp <- apply(mvdat[,c("exposure_pval.x1","exposure_pval.x2")], 1, min)
+  #mv <- subset(mvdat, mvdat$minp < 5e-08)
+ mv <- mvdat
   mvmr <- summary(lm(mv$outcome_beta ~ -1 + mv$exposure_beta.x1 + mv$exposure_beta.x2, weights = 1/(mv$outcome_se^2)))
   
   rho = cor(x1,x2)
@@ -66,7 +72,7 @@ MRest_OR <- function()
   
   
   # mvdat <- make_mvdat(list(x1, x2), y, g)
-  for(s in 1:(l+lo)){
+  for(s in 1:(l)){
     x1_res <- summary(glm(x1~g[,s], family = binomial))
     x2_res <- summary(glm(x2~g[,s], family = binomial))
     y_res <- summary(glm(y~gb[,s], family = binomial))
@@ -91,16 +97,19 @@ MRest_OR <- function()
   
   mvdat$minp <- apply(mvdat[,c("exposure_pval.x1","exposure_pval.x2")], 1, min)
   mvdat <- as.data.frame(mvdat)
-  dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
+  #dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
+  dat1 <- mvdat
   unix1 <- summary(lm(dat1$outcome_beta ~ -1 + dat1$exposure_beta.x1, weights = 1/(dat1$outcome_se^2)))
   
   F_1 <- (log(dat1$exposure_beta.x1)/(dat1$exposure_se.x1))^2
   
-  dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
+  #dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
+  dat2 <- mvdat
   unix2 <- summary(lm(dat2$outcome_beta ~ -1 + dat2$exposure_beta.x2, weights = 1/(dat2$outcome_se^2)))
   F_2 <- (log(dat2$exposure_beta.x2)/(dat2$exposure_se.x2))^2
   
-  mv <- subset(mvdat, mvdat$minp < 5e-08)
+  #mv <- subset(mvdat, mvdat$minp < 5e-08)
+  mv <- mvdat
   mvmr <- summary(lm(mv$outcome_beta ~ -1 + mv$exposure_beta.x1 + mv$exposure_beta.x2, weights = 1/(mv$outcome_se^2)))
   
   rho = cor(x1,x2)

@@ -23,10 +23,10 @@ u2b = rnorm(n,0,1)
 # This is the standard reference setup where everything should work.
 
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.75*rnorm(n,0,1) 
 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.75*rnorm(n,0,1) 
 
 #outcome
 y <- 0.2*x1b + 0.3*x2b + gb[,(l+1):(l+lo)]%*%effs_out + effs_c1*ub + effs_c2*u2b

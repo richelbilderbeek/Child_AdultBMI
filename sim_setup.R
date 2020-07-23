@@ -23,10 +23,10 @@ u2b = rnorm(n,0,1)
 # This is the standard reference setup where everything should work.
 
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.75*rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.75*rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 #outcome
 y <- 0.2*x1b + 0.3*x2b + gb[,(l+1):(l+lo)]%*%effs_out + effs_c1*ub + effs_c2*u2b
@@ -38,12 +38,12 @@ colnames(resa)[1] <- ("sim")
 
 ##b - SNPs have same effect on X1 and X2
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g + effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g + effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 
 #exposures
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g + effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g + effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 #outcome
 y <- 0.2*x1b + 0.3*x2b + gb[,(l+1):(l+lo)]%*%effs_out + effs_c1*ub + effs_c2*u2b + rnorm(n,0,1)
@@ -56,10 +56,10 @@ colnames(resb)[1] <- ("sim")
 
 #exposures
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 
 #outcome
@@ -77,14 +77,14 @@ colnames(resc)[1] <- ("sim")
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
 #outcome 
 ya <- 0.2*x1 +g[,(l+1):(l+lo)]%*%effs_out + effs_c1*ua + effs_c2*u2a + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*ya + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*ya + 0.5*rnorm(n,0,1) 
 
 
 #exposures
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
 #outcome 
 y <- 0.2*x1b +gb[,(l+1):(l+lo)]%*%effs_out + effs_c1*ub + effs_c2*u2b + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*y + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*y + 0.5*rnorm(n,0,1) 
 
 
 #res <- MRest(TRUE)      # nb this all of the SNPs for the outcome as well and will select them for estimation if they are significantly associated with x2
@@ -96,13 +96,13 @@ colnames(resd)[1] <- ("sim")
 #e. change between x1 and x2 -> y
 
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 ch <- x2 - x1
 
 #outcome 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 chb <- x2b - x1b
 
@@ -116,13 +116,13 @@ colnames(rese)[1] <- ("sim")
 ##f. same as e but only an effect of the change and no effect of level. 
 
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 ch <- x2 - x1
 
 #outcome 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 chb <- x2b - x1b
 
@@ -141,10 +141,10 @@ effs_g2 <- c(effs_g[1:l_q],
              rnorm(l-l_q,0,sqrt(0.1/l)))
 
 x1 <- g[,1:l]%*%effs_g + effs_c1*ua + rnorm(n,0,1)
-x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + rnorm(n,0,1) 
+x2 <- g[,1:l]%*%effs_g2 + effs_c2*u2a + 0.5*x1 + 0.5*rnorm(n,0,1) 
 
 x1b <- gb[,1:l]%*%effs_g + effs_c1*ub + rnorm(n,0,1)
-x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + rnorm(n,0,1) 
+x2b <- gb[,1:l]%*%effs_g2 + effs_c2*u2b + 0.5*x1b + 0.5*rnorm(n,0,1) 
 
 #outcome
 y <- 0.2*x1b + 0.3*x2b + gb[,(l+1):(l+lo)]%*%effs_out + effs_c1*ub + effs_c2*u2b

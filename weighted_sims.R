@@ -1,11 +1,17 @@
 library(simulateGP)
 
+args <- commandArgs(T)
+set.seed(as.numeric(args[1]))
+job_id <- (as.numeric(args[1]))
+
 source('MRest_weighting.R')
 reps = 100
 
 n = 300000 #number of individuals (300,000)
 l = 150    #number of SNPs (for exposures - total)
 lo=10
+
+
 
 resultsA = NULL
 
@@ -74,3 +80,5 @@ for(i in 1:reps){
   resultsA <- rbind(resultsA,resa, resb)
   }
 }
+
+save(resultsA, file=sprintf("sim_output_weight%s.Rda", job_id))

@@ -66,14 +66,20 @@ MRest <- function()
   Qind_2r <- ((mv2$exposure_beta.x2 - delta2*mv2$exposure_beta.x1)^2)/(mv2$exposure_se.x2^2 + (delta2^2)*mv2$exposure_se.x1^2 - 2*delta2*sig12)
   
   
-out <- data.frame(rho, unix1$coefficients[1,1], nrow(dat1), mean(F_1), unix2$coefficients[1,1], nrow(dat2), mean(F_2), 
-                      mvmr$coefficients[1,1], sum(Qind_1)/(nrow(mv)-1), mvmr$coefficients[2,1], nrow(mv), sum(Qind_2)/(nrow(mv)-1), 
-                  nrow(mv2), mvmr_r$coefficients[1,1], sum(Qind_1r)/(nrow(mv2)-1), mvmr_r$coefficients[2,1],  sum(Qind_2r)/(nrow(mv2)-1), 
+out <- data.frame(rho, unix1$coefficients[1,1],unix1$coefficients[1,2], nrow(dat1), mean(F_1), 
+                  unix2$coefficients[1,1],unix2$coefficients[1,2],nrow(dat2), mean(F_2), 
+                      mvmr$coefficients[1,1],mvmr$coefficients[1,2], sum(Qind_1)/(nrow(mv)-1), 
+                  mvmr$coefficients[2,1],  mvmr$coefficients[2,2], sum(Qind_2)/(nrow(mv)-1), nrow(mv),
+                  nrow(mv2), mvmr_r$coefficients[1,1],mvmr_r$coefficients[1,2], sum(Qind_1r)/(nrow(mv2)-1), 
+                  mvmr_r$coefficients[2,1], mvmr_r$coefficients[2,2],  sum(Qind_2r)/(nrow(mv2)-1), 
                       snps_outx1, snps_outx2)
 
-colnames(out) <- c("rho", "uni_x1_b", "uni_x1_nsnp","F_x1" , "uni_x2_b", "uni_x2_nsnp", "F_x2", 
-                       "mv_x1_b", "CF_x1", "mv_x2_b", "mv_nsnp", "CF_x2", 
-                   "mv_nsnp_res", "mv_x1_b_res", "CF_x1_res", "mv_x2_b_res",  "CF_x2_res", 
+colnames(out) <- c("rho", "uni_x1_b","uni_x1_se", "uni_x1_nsnp","F_x1" , 
+                   "uni_x2_b","uni_x2_se", "uni_x2_nsnp", "F_x2", 
+                       "mv_x1_b",     "mv_x1_se", "CF_x1", 
+                   "mv_x2_b","mv_x2_se",  "CF_x2","mv_nsnp", 
+                   "mv_nsnp_res", "mv_x1_b_res","mv_x1_se_res", "CF_x1_res", 
+                   "mv_x2_b_res",   "mv_x2_se_res", "CF_x2_res", 
                    "snps_outx1", "snps_outx2")
   
 return(out)

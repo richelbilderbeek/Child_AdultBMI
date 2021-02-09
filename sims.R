@@ -13,13 +13,13 @@ for(i in 1:reps){
   #variables
   g <- make_geno(n,(l+lo),0.5)
   Sigma = matrix(c(1, 0.8,0.8,0.8,1,0.8,0.8,0.8,1), nrow = 3)
-  u <- mvrnorm(n, c(0,0,0), Sigma)
+  u <- mvrnorm(n, c(1,1,1), Sigma)
   ua = u[,1]
   u2a = u[,2]
   u3a = u[,3]
   
   gb <- make_geno(n,(l+lo),0.5)
-  u <- mvrnorm(n, c(0,0,0), Sigma)
+  u <- mvrnorm(n, c(1,1,1), Sigma)
   ub = u[,1]
   u2b= u[,2]
   u3b = u[,3]

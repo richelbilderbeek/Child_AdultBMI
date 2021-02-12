@@ -141,6 +141,31 @@ for(i in 1:reps){
   colnames(rese)[1] <- ("sim")
   
   
-  results <- rbind(results,resa, resb, resc, resd, rese)
+  ##f - x1 and x2 are associated with different latent periods but only 20% of the SNPs have different effects
+  # on each period.
+  # For supplementary material
+  
+  L1 <- g[,1:l]%*%effs_g 
+  L2 <- g[,1:30]%*%effs_g2[1:30] + g[,31:l]%*%effs_g[31:l]
+  
+  x1 <- L1 + effs_c1*ua + rnorm(n,0,1)
+  x2 <- L2 + effs_c2*u2a + 0.1*x1 + 0.9*rnorm(n,0,1) 
+  
+  L1b <- gb[,1:l]%*%effs_g 
+  x1b <- L1b + effs_c1*ub + rnorm(n,0,1)
+  L2b <- gb[,1:l]%*%effs_g2 
+  x2b <- L2b + effs_c2*u2b + 0.1*x1b + 0.9*rnorm(n,0,1) 
+  
+  #outcome
+  y <- 0.2*x1b + 0.3*x2b + gb[,(l+1):(l+lo)]%*%effs_out + 0.5*effs_c1*ub + 0.5*effs_c2*u2b
+  
+  res <- MRest()
+  resf <- data.frame("f", res)
+  colnames(resf)[1] <- ("sim")
+  
+  
+  
+  
+  results <- rbind(results,resa, resb, resc, resd, rese, resf)
   
 }

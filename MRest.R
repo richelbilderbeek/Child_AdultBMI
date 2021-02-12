@@ -52,7 +52,7 @@ MRest <- function()
   
   #calculate the MVMR using only the selected SNPs
   mv$diff = mv$exposure_beta.x1 - mv$exposure_beta.x2
-  cutoff <- 1.282*sd(mv$diff) #this keeps the top and bottom 10% for the difference
+  cutoff <- 1.282*sd(mv$diff) #this keeps the 20% with the largest absolute difference of effect.
   mv2 <- subset(mv, abs(mv$diff)>cutoff)
   
   mvmr_r <- summary(lm(mv2$outcome_beta ~ -1 + mv2$exposure_beta.x1 + mv2$exposure_beta.x2, weights = 1/(mv2$outcome_se^2)))

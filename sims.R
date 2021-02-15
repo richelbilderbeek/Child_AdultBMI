@@ -153,7 +153,7 @@ for(i in 1:reps){
   
   L1b <- gb[,1:l]%*%effs_g 
   x1b <- L1b + effs_c1*ub + rnorm(n,0,1)
-  L2b <- gb[,1:l]%*%effs_g2 
+  L2b <-  gb[,1:30]%*%effs_g2[1:30] + gb[,31:l]%*%effs_g[31:l]
   x2b <- L2b + effs_c2*u2b + 0.1*x1b + 0.9*rnorm(n,0,1) 
   
   #outcome

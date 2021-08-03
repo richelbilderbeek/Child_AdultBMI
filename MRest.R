@@ -25,11 +25,13 @@ MRest <- function()
                        "outcome_se","exposure_pval.x1", "exposure_pval.x2", "outcome_pval" )
  
  dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
+  #dat1 <- mvdat
  unix1 <- summary(lm(dat1$outcome_beta ~ -1 + dat1$exposure_beta.x1, weights = 1/(dat1$outcome_se^2)))
  
  F_1 <- (dat1$exposure_beta.x1/dat1$exposure_se.x1)^2
  
  dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
+ #dat2 <- mvdat
  unix2 <- summary(lm(dat2$outcome_beta ~ -1 + dat2$exposure_beta.x2, weights = 1/(dat2$outcome_se^2)))
  F_2 <- (dat2$exposure_beta.x2/dat2$exposure_se.x2)^2
  
@@ -66,7 +68,7 @@ MRest <- function()
   Qind_2r <- ((mv2$exposure_beta.x2 - delta2*mv2$exposure_beta.x1)^2)/(mv2$exposure_se.x2^2 + (delta2^2)*mv2$exposure_se.x1^2 - 2*delta2*sig12)
   
   
-out <- data.frame(rho, unix1$coefficients[1,1],unix1$coefficients[1,2], nrow(dat1), mean(F_1), 
+out <- data.frame(rho, cor(L1,L2), unix1$coefficients[1,1],unix1$coefficients[1,2], nrow(dat1), mean(F_1), 
                   unix2$coefficients[1,1],unix2$coefficients[1,2],nrow(dat2), mean(F_2), 
                       mvmr$coefficients[1,1],mvmr$coefficients[1,2], sum(Qind_1)/(nrow(mv)-1), 
                   mvmr$coefficients[2,1],  mvmr$coefficients[2,2], sum(Qind_2)/(nrow(mv)-1), nrow(mv),
@@ -74,7 +76,7 @@ out <- data.frame(rho, unix1$coefficients[1,1],unix1$coefficients[1,2], nrow(dat
                   mvmr_r$coefficients[2,1], mvmr_r$coefficients[2,2],  sum(Qind_2r)/(nrow(mv2)-1), 
                       snps_outx1, snps_outx2)
 
-colnames(out) <- c("rho", "uni_x1_b","uni_x1_se", "uni_x1_nsnp","F_x1" , 
+colnames(out) <- c("rho", "L1_L2_cor", "uni_x1_b","uni_x1_se", "uni_x1_nsnp","F_x1" , 
                    "uni_x2_b","uni_x2_se", "uni_x2_nsnp", "F_x2", 
                        "mv_x1_b",     "mv_x1_se", "CF_x1", 
                    "mv_x2_b","mv_x2_se",  "CF_x2","mv_nsnp", 

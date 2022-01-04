@@ -74,7 +74,7 @@ for(i in 1:reps){
   l = la
   lo=loa
   
-  #ii. same model but x2 -> y and x1 !-> y
+  #ii. x2 -> y and x1 !-> y
   
   #exposures
   x1 <- make_phen(c(effs_g, effs_c1), cbind(g[,1:l], u))

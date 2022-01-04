@@ -2,13 +2,15 @@
 
 results = NULL
 
+#define effects outside the repetitions so they are consistent across the simulations
+effs_g <- rnorm(l,0,sqrt(0.15/l))  
+effs_g2 <- 0.25*effs_g + rnorm((l),0,sqrt(0.15/l))
+effs_out <- rnorm(lo,0,sqrt(0.3/l))
+effs_c1 <- 0.5
+effs_c2 <- 0.5
+
 for(i in 1:reps){
-  #effects
-  effs_g <- rnorm(l,0,sqrt(0.15/l))  
-  effs_g2 <- 0.25*effs_g + 0.75*rnorm(l,0,sqrt(0.15/l))
-  effs_out <- rnorm(lo,0,sqrt(0.3/l))
-  effs_c1 <- 0.5
-  effs_c2 <- 0.5
+  
   
   #variables
   g <- make_geno(n,(l+lo),0.5)
@@ -45,7 +47,7 @@ for(i in 1:reps){
   resa <- data.frame("a", res)
   colnames(resa)[1] <- ("sim")
   
-  
+ 
   ##b - x1 and x2 are associated with the same latent period
   L1 <- g[,1:l]%*%effs_g 
   L2 <- g[,1:l]%*%effs_g2

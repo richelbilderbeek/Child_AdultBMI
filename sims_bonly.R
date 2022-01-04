@@ -4,10 +4,14 @@ rm(list = ls(all=TRUE))
 
 set.seed(4)
 
-
 library(MASS)
-library(simulateGP)
 source('MRest.R')
+
+make_geno <- function(nid, nsnp, af)
+{
+  return(matrix(rbinom(nid * nsnp, 2, af), nid, nsnp))
+}
+
 
 reps = 2000
 n = 150000 #number of individuals

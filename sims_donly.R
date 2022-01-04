@@ -6,11 +6,17 @@ set.seed(4)
 
 
 library(MASS)
-library(simulateGP)
+library(ppcor)
 source('MRest.R')
 
-reps = 2000
-n = 150000 #number of individuals
+make_geno <- function(nid, nsnp, af)
+{
+  return(matrix(rbinom(nid * nsnp, 2, af), nid, nsnp))
+}
+
+
+reps = 5
+n = 150000 #number of individuals (should be 150000)
 l = 150    #number of SNPs (for exposures - total)
 lo = 10 #number of SNPs for outcome
 
@@ -67,12 +73,11 @@ for(i in 1:reps){
   resd <- data.frame("d", res)
   colnames(resd)[1] <- ("sim")
   
-  resd$beta1_u <- 0.2 + 0.3*cor(L1,L2) + 0.2*cor(L1,L3) +0.1*0.3 +0.1*0.1*0.3
-  resd$beta2_u <- 0.3 + 0.1*0.2 + cor(L2,L3)*0.2 + cor(L1,L2)*0.2
-  resd$beta1_m <- 0.2 
-  resd$beta2_m <- 0.3 + 0.1*0.2 + cor(L2,L3)*0.2
-  resd$L1_L3_cor <- cor(L1,L3) 
-  resd$L2_L3_cor <- cor(L2,L3) 
+  resd$beta1_u <- 0.2 + 0.1*(0.3+0.1*0.2) + cor(effs_g, effs_g2)*0.3 + cor(effs_g, effs_g3)*0.2
+  resd$beta2_u <- 0.3 + 0.1*0.2 + cor(effs_g, effs_g2)*0.2 + cor(effs_g2, effs_g3)*0.2
+  
+  resd$beta1_m <- 0.2 + (pcor.test(effs_g,effs_g3,effs_g2)$estimate)*0.2
+  resd$beta2_m <- 0.3 + (pcor.test(effs_g2,effs_g3,effs_g)$estimate)*0.2
   
   results <- rbind(results,resd)
   

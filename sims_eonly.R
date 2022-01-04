@@ -6,8 +6,14 @@ set.seed(4)
 
 
 library(MASS)
-library(simulateGP)
+library(ppcor)
 source('MRest.R')
+
+make_geno <- function(nid, nsnp, af)
+{
+  return(matrix(rbinom(nid * nsnp, 2, af), nid, nsnp))
+}
+
 
 reps = 2000
 n = 150000 #number of individuals
@@ -65,12 +71,11 @@ for(i in 1:reps){
   rese <- data.frame("e", res)
   colnames(rese)[1] <- ("sim")
   
-  rese$beta1_u <- 0.2 + 0.3*cor(L1,L2) + 0.2*cor(L1,L3) +0.1*0.3 +0.1*0.1*0.3
-  rese$beta2_u <- 0.3 + 0.1*0.2 + cor(L2,L3)*0.2 + cor(L1,L2)*0.2
-  rese$beta1_m <- 0.2 
-  rese$beta2_m <- 0.3 + 0.1*0.2 + cor(L2,L3)*0.2
-  rese$L1_L3_cor <- cor(L1,L3) 
-  rese$L2_L3_cor <- cor(L2,L3) 
+  resd$beta1_u <- 0.2 + 0.1*(0.3+0.1*0.2) + cor(effs_g, effs_g2)*0.3 + cor(effs_g, effs_g3)*0.2
+  resd$beta2_u <- 0.3 + 0.1*0.2 + cor(effs_g, effs_g2)*0.2 + cor(effs_g2, effs_g3)*0.2
+  
+  resd$beta1_m <- 0.2 + (pcor.test(effs_g,effs_g3,effs_g2)$estimate)*0.2
+  resd$beta2_m <- 0.3 + (pcor.test(effs_g2,effs_g3,effs_g)$estimate)*0.2 +  0.1*0.2 
   
   results <- rbind(results,rese)
   

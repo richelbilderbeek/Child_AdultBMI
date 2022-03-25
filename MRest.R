@@ -59,7 +59,7 @@ MRest <- function()
   
   mvmr_r <- summary(lm(mv2$outcome_beta ~ -1 + mv2$exposure_beta.x1 + mv2$exposure_beta.x2, weights = 1/(mv2$outcome_se^2)))
   
-  sig12 = rho*mv2$exposure_se.x1*mv2$exposure_se.x2
+  sig12 = as.vector(rho)*mv2$exposure_se.x1*mv2$exposure_se.x2
   
   delta1 <- lm(mv2$exposure_beta.x1~ -1 + mv2$exposure_beta.x2)$coefficients[1]
   delta2 <- lm(mv2$exposure_beta.x2~ -1 + mv2$exposure_beta.x1)$coefficients[1]

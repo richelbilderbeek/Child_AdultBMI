@@ -24,23 +24,17 @@ MRest <- function()
   colnames(mvdat) <- c("exposure_beta.x1", "exposure_beta.x2", "outcome_beta","exposure_se.x1", "exposure_se.x2", 
                        "outcome_se","exposure_pval.x1", "exposure_pval.x2", "outcome_pval" )
   
-  
-  #add in steiger filtering between the outcome and second exposure here
-  
-  
-  
-  
-  
-  
- 
+ #steiger filtering
+  mvdat<-filter(mvdat, !(exposure_pval.x2<5e-8 & outcome_pval < exposure_pval.x2))
+
  dat1 <- subset(mvdat, mvdat$exposure_pval.x1 < 5e-08)
-  #dat1 <- mvdat
+
  unix1 <- summary(lm(dat1$outcome_beta ~ -1 + dat1$exposure_beta.x1, weights = 1/(dat1$outcome_se^2)))
  
  F_1 <- (dat1$exposure_beta.x1/dat1$exposure_se.x1)^2
  
  dat2 <- subset(mvdat, mvdat$exposure_pval.x2 < 5e-08)
- #dat2 <- mvdat
+
  unix2 <- summary(lm(dat2$outcome_beta ~ -1 + dat2$exposure_beta.x2, weights = 1/(dat2$outcome_se^2)))
  F_2 <- (dat2$exposure_beta.x2/dat2$exposure_se.x2)^2
  
@@ -49,7 +43,7 @@ MRest <- function()
   mvmr <- summary(lm(mv$outcome_beta ~ -1 + mv$exposure_beta.x1 + mv$exposure_beta.x2, weights = 1/(mv$outcome_se^2)))
   
   rho = cor(x1,x2)
-  sig12 = rho*mv$exposure_se.x1*mv$exposure_se.x2
+  sig12 = as.vector(rho)*mv$exposure_se.x1*mv$exposure_se.x2
   
   delta1 <- lm(mv$exposure_beta.x1~ -1 + mv$exposure_beta.x2)$coefficients[1]
   delta2 <- lm(mv$exposure_beta.x2~ -1 + mv$exposure_beta.x1)$coefficients[1]
@@ -60,31 +54,7 @@ MRest <- function()
   snps_outx1 <- as.numeric(sum((mvdat$exposure_pval.x1[(l+1):(l+lo)]<5e-08)))
   snps_outx2 <- as.numeric(sum((mvdat$exposure_pval.x2[(l+1):(l+lo)]<5e-08)))
   
-  
-  #calculate the MVMR using only the selected SNPs
-  mv$diff = mv$exposure_beta.x1 - mv$exposure_beta.x2
-  cutoff <- 1.282*sd(mv$diff) #this keeps the 20% with the largest absolute difference of effect.
-  mv2 <- subset(mv, abs(mv$diff)>cutoff)
-  
-  mvmr_r <- summary(lm(mv2$outcome_beta ~ -1 + mv2$exposure_beta.x1 + mv2$exposure_beta.x2, weights = 1/(mv2$outcome_se^2)))
-  
-  sig12 = rho*mv2$exposure_se.x1*mv2$exposure_se.x2
-  
-  delta1 <- lm(mv2$exposure_beta.x1~ -1 + mv2$exposure_beta.x2)$coefficients[1]
-  delta2 <- lm(mv2$exposure_beta.x2~ -1 + mv2$exposure_beta.x1)$coefficients[1]
-  
-  Qind_1r <- ((mv2$exposure_beta.x1 - delta1*mv2$exposure_beta.x2)^2)/(mv2$exposure_se.x1^2 + (delta1^2)*mv2$exposure_se.x2^2 - 2*delta1*sig12)
-  Qind_2r <- ((mv2$exposure_beta.x2 - delta2*mv2$exposure_beta.x1)^2)/(mv2$exposure_se.x2^2 + (delta2^2)*mv2$exposure_se.x1^2 - 2*delta2*sig12)
-  
-  
-out <- data.frame(rho, cor(L1,L2), unix1$coefficients[1,1],unix1$coefficients[1,2], nrow(dat1), mean(F_1), 
-                  unix2$coefficients[1,1],unix2$coefficients[1,2],nrow(dat2), mean(F_2), 
-                      mvmr$coefficients[1,1],mvmr$coefficients[1,2], sum(Qind_1)/(nrow(mv)-1), 
-                  mvmr$coefficients[2,1],  mvmr$coefficients[2,2], sum(Qind_2)/(nrow(mv)-1), nrow(mv),
-                  nrow(mv2), mvmr_r$coefficients[1,1],mvmr_r$coefficients[1,2], sum(Qind_1r)/(nrow(mv2)-1), 
-                  mvmr_r$coefficients[2,1], mvmr_r$coefficients[2,2],  sum(Qind_2r)/(nrow(mv2)-1), 
-                      snps_outx1, snps_outx2)
-
+ 
 colnames(out) <- c("rho", "L1_L2_cor", "uni_x1_b","uni_x1_se", "uni_x1_nsnp","F_x1" , 
                    "uni_x2_b","uni_x2_se", "uni_x2_nsnp", "F_x2", 
                        "mv_x1_b",     "mv_x1_se", "CF_x1", 
